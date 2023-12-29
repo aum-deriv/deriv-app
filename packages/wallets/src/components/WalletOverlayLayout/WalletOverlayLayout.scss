@@ -1,0 +1,33 @@
+.wallets-overlay-layout {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 2.4rem;
+
+    @include mobile {
+        flex-direction: column;
+        gap: 1.6rem;
+    }
+
+    &__content {
+        height: 100%;
+        flex: 1;
+        padding-top: 2.4rem;
+
+        @include mobile {
+            padding-top: 0;
+        }
+    }
+
+    &__side-pane {
+        height: 100%;
+        padding-right: 2.4rem;
+        display: flex;
+
+        @include mobile {
+            width: 100%;
+            padding-right: 0;
+        }
+    }
+}
