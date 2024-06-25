@@ -2,9 +2,8 @@ import React, { forwardRef, Ref, useEffect, useState } from 'react';
 import { Field, FieldProps, useFormikContext } from 'formik';
 import * as Yup from 'yup';
 import WalletTextField, { WalletTextFieldProps } from '../Base/WalletTextField/WalletTextField';
-import { useFlow } from '../FlowProvider';
 
-export interface TFlowFieldProps extends WalletTextFieldProps {
+export interface TFormFieldProps extends WalletTextFieldProps {
     isInvalid?: WalletTextFieldProps['isInvalid'];
     name: string;
     validationSchema?: Yup.AnySchema;
@@ -15,14 +14,13 @@ export interface TFlowFieldProps extends WalletTextFieldProps {
  * Use this component when you are using the FlowProvider with a form and several inputs,
  * and you want those input values to be tracked and validated
  */
-const FlowTextField = forwardRef(
+const FormField = forwardRef(
     (
-        { defaultValue, disabled, errorMessage, isInvalid, name, validationSchema, ...rest }: TFlowFieldProps,
+        { defaultValue, disabled, errorMessage, isInvalid, name, validationSchema, ...rest }: TFormFieldProps,
         ref: Ref<HTMLInputElement>
     ) => {
         const [hasTouched, setHasTouched] = useState(false);
-        const { setFormValues } = useFlow();
-        const { setFieldTouched } = useFormikContext();
+        const { setFieldTouched, setFieldValue: setFormValues } = useFormikContext();
 
         const validateField = (value: unknown) => {
             try {
@@ -71,5 +69,5 @@ const FlowTextField = forwardRef(
     }
 );
 
-FlowTextField.displayName = 'FlowTextField';
-export default FlowTextField;
+FormField.displayName = 'FormField';
+export default FormField;
