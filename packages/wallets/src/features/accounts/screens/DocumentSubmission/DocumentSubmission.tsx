@@ -1,6 +1,7 @@
 import React from 'react';
+import { useFormikContext } from 'formik';
 import { useTranslation } from 'react-i18next';
-import { Dropzone, useFlow, WalletText } from '../../../../components';
+import { Dropzone, WalletText } from '../../../../components';
 import useDevice from '../../../../hooks/useDevice';
 import Upload from '../../../../public/images/accounts/upload.svg';
 import i18n from '../../../../translations/i18n';
@@ -16,7 +17,7 @@ const listItems = [
 
 const DocumentSubmission: React.FC = () => {
     const { isMobile } = useDevice();
-    const { setFormValues } = useFlow();
+    const { setFieldValue } = useFormikContext();
     const { t } = useTranslation();
 
     return (
@@ -70,7 +71,7 @@ const DocumentSubmission: React.FC = () => {
                         hoverMessage='Upload your file here'
                         icon={<Upload />}
                         maxSize={8388608}
-                        onFileChange={(file?: File) => setFormValues('poaDocument', file)}
+                        onFileChange={(file?: File) => setFieldValue('poaDocument', file)}
                         title={t('Drag and drop a file or click to browse your files.')}
                         titleType='bold'
                     />

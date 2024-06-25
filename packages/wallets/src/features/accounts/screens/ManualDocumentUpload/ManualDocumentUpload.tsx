@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFlow } from '../../../../components/FlowProvider';
+import { useFormikContext } from 'formik';
 import { DocumentSelection } from './components/DocumentSelection';
 import {
     DrivingLicenseDocumentUpload,
@@ -10,19 +10,19 @@ import {
 import './ManualDocumentUpload.scss';
 
 const ManualDocumentUploadContent = () => {
-    const { formValues, setFormValues } = useFlow();
+    const { setFieldValue, values } = useFormikContext();
 
-    if (formValues.selectedManualDocument === 'passport') {
+    if (values.selectedManualDocument === 'passport') {
         return <PassportDocumentUpload />;
-    } else if (formValues.selectedManualDocument === 'driving-license') {
+    } else if (values.selectedManualDocument === 'driving-license') {
         return <DrivingLicenseDocumentUpload />;
-    } else if (formValues.selectedManualDocument === 'identity-card') {
+    } else if (values.selectedManualDocument === 'identity-card') {
         return <IdentityCardDocumentUpload />;
-    } else if (formValues.selectedManualDocument === 'nimc-slip') {
+    } else if (values.selectedManualDocument === 'nimc-slip') {
         return <NIMCSlipDocumentUpload />;
     }
 
-    return <DocumentSelection setSelectedDocument={(doc: string) => setFormValues('selectedManualDocument', doc)} />;
+    return <DocumentSelection setSelectedDocument={(doc: string) => setFieldValue('selectedManualDocument', doc)} />;
 };
 
 const ManualDocumentUpload = () => {

@@ -1,6 +1,7 @@
 import React from 'react';
+import { useFormikContext } from 'formik';
 import { useSettings, useStatesList } from '@deriv/api-v2';
-import { FormField, useFlow } from '../../../../components';
+import { FormField } from '../../../../components';
 import { InlineMessage, WalletDropdown, WalletText } from '../../../../components/Base';
 import {
     addressFirstLineValidator,
@@ -11,7 +12,7 @@ import {
 import './AddressSection.scss';
 
 const AddressSection: React.FC = () => {
-    const { setFormValues } = useFlow();
+    const { setFieldValue } = useFormikContext();
     const { data: getSettings } = useSettings();
     const country = getSettings?.country_code ?? '';
     const { data: statesList } = useStatesList(country);
@@ -54,7 +55,7 @@ const AddressSection: React.FC = () => {
                     list={statesList}
                     listHeight='sm'
                     name='stateProvinceDropdownLine'
-                    onSelect={selectedItem => setFormValues('stateProvinceDropdownLine', selectedItem)}
+                    onSelect={selectedItem => setFieldValue('stateProvinceDropdownLine', selectedItem)}
                     value={getSettings?.address_state ?? ''}
                 />
                 <FormField

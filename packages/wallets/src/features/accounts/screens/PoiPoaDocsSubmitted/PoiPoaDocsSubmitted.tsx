@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
+import { useFormikContext } from 'formik';
 import { useInvalidateQuery } from '@deriv/api-v2';
 import { DerivLightWaitingPoiIcon } from '@deriv/quill-icons';
-import { useFlow, WalletButton, WalletsActionScreen } from '../../../../components';
+import { WalletButton, WalletsActionScreen } from '../../../../components';
 import { useModal } from '../../../../components/ModalProvider';
 import './PoiPoaDocsSubmitted.scss';
 
 const PoiPoaDocsSubmitted = () => {
     const invalidate = useInvalidateQuery();
     const { hide } = useModal();
-    const { formValues } = useFlow();
+    const { values } = useFormikContext();
 
     // need invalidate queries in order to update status badge of CFD account
     useEffect(() => {
@@ -22,7 +23,7 @@ const PoiPoaDocsSubmitted = () => {
         <div className='wallets-poi-poa-submitted'>
             <WalletsActionScreen
                 description={
-                    formValues.service === 'manual'
+                    values.service === 'manual'
                         ? "We'll review your documents and notify you of its status within 1 - 3 working days."
                         : "We'll review your documents and notify you of its status within 5 minutes."
                 }

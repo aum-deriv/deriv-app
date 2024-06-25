@@ -1,10 +1,10 @@
 import React from 'react';
+import { useFormikContext } from 'formik';
 import { DerivLightDeclinedPoiIcon } from '@deriv/quill-icons';
 import { WalletButton } from '../../../../components/Base';
 import { WalletsActionScreen } from '../../../../components/WalletsActionScreen';
 import { ErrorCode } from '../../constants';
 import './PoiUploadError.scss';
-import { useFlow } from '../../../../components/FlowProvider';
 
 type PoiUploadErrorProps = {
     errorCode: keyof typeof ErrorCode;
@@ -15,32 +15,32 @@ const errorCodeToDescriptionMapper: Record<keyof typeof ErrorCode, string> = {
 };
 
 const PoiUploadError = ({ errorCode }: PoiUploadErrorProps) => {
-    const { formValues, setFormValues, switchScreen } = useFlow();
+    const { setFieldValue, values } = useFormikContext();
 
     // clears the form values to navigate back to document selection
     const switchBackToDocumentSelection = () => {
-        if (formValues.selectedManualDocument === 'passport') {
-            setFormValues('passportNumber', '');
-            setFormValues('passportExpiryDate', '');
-            setFormValues('passportCard', '');
-        } else if (formValues.selectedManualDocument === 'driving-license') {
-            setFormValues('drivingLicenseNumber', '');
-            setFormValues('drivingLicenseExpiryDate', '');
-            setFormValues('drivingLicenseCardFront', '');
-            setFormValues('drivingLicenseCardBack', '');
-        } else if (formValues.selectedManualDocument === 'identity-card') {
-            setFormValues('identityCardNumber', '');
-            setFormValues('identityCardExpiryDate', '');
-            setFormValues('identityCardFront', '');
-            setFormValues('identityCardBack', '');
-        } else if (formValues.selectedManualDocument === 'nimc-slip') {
-            setFormValues('nimcNumber', '');
-            setFormValues('nimcCardFront', '');
-            setFormValues('nimcCardBack', '');
+        if (values.selectedManualDocument === 'passport') {
+            setFieldValue('passportNumber', '');
+            setFieldValue('passportExpiryDate', '');
+            setFieldValue('passportCard', '');
+        } else if (values.selectedManualDocument === 'driving-license') {
+            setFieldValue('drivingLicenseNumber', '');
+            setFieldValue('drivingLicenseExpiryDate', '');
+            setFieldValue('drivingLicenseCardFront', '');
+            setFieldValue('drivingLicenseCardBack', '');
+        } else if (values.selectedManualDocument === 'identity-card') {
+            setFieldValue('identityCardNumber', '');
+            setFieldValue('identityCardExpiryDate', '');
+            setFieldValue('identityCardFront', '');
+            setFieldValue('identityCardBack', '');
+        } else if (values.selectedManualDocument === 'nimc-slip') {
+            setFieldValue('nimcNumber', '');
+            setFieldValue('nimcCardFront', '');
+            setFieldValue('nimcCardBack', '');
         }
 
-        setFormValues('selectedManualDocument', '');
-        switchScreen('manualScreen');
+        setFieldValue('selectedManualDocument', '');
+        // switchScreen('manualScreen');
     };
 
     return (

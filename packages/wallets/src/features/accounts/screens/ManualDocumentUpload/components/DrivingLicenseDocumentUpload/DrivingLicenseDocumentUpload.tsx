@@ -1,6 +1,7 @@
 import React from 'react';
+import { useFormikContext } from 'formik';
 import moment from 'moment';
-import { DatePicker, Divider, Dropzone, FormField, useFlow, WalletText } from '../../../../../../components';
+import { DatePicker, Divider, Dropzone, FormField, WalletText } from '../../../../../../components';
 import DrivingLicenseCardBack from '../../../../../../public/images/accounts/document-back.svg';
 import DrivingLicenseCardFront from '../../../../../../public/images/accounts/driving-license-front.svg';
 import { documentRequiredValidator, expiryDateValidator } from '../../../../validations';
@@ -8,10 +9,10 @@ import { DocumentRuleHints } from '../DocumentRuleHints';
 import './DrivingLicenseDocumentUpload.scss';
 
 const DrivingLicenseDocumentUpload = () => {
-    const { formValues, setFormValues } = useFlow();
+    const { setFieldValue, values } = useFormikContext();
 
     const handleDateChange = (formattedDate: string | null) => {
-        setFormValues('drivingLicenseExpiryDate', formattedDate);
+        setFieldValue('drivingLicenseExpiryDate', formattedDate);
     };
 
     return (
@@ -19,13 +20,13 @@ const DrivingLicenseDocumentUpload = () => {
             <WalletText>First, enter your Driving licence number and the expiry date.</WalletText>
             <div className='wallets-driving-license-document-upload__input-group'>
                 <FormField
-                    defaultValue={formValues.drivingLicenceNumber ?? ''}
+                    defaultValue={values.drivingLicenceNumber ?? ''}
                     label='Driving licence number*'
                     name='drivingLicenceNumber'
                     validationSchema={documentRequiredValidator('Driving licence number')}
                 />
                 <DatePicker
-                    defaultValue={formValues.drivingLicenseExpiryDate ?? ''}
+                    defaultValue={values.drivingLicenseExpiryDate ?? ''}
                     label='Expiry date*'
                     minDate={moment().add(2, 'days').toDate()}
                     name='drivingLicenseExpiryDate'
@@ -40,23 +41,23 @@ const DrivingLicenseDocumentUpload = () => {
                 <div className='wallets-driving-license-document-upload__dropzone'>
                     <Dropzone
                         buttonText='Drop file or click here to upload'
-                        defaultFile={formValues.drivingLicenseCardFront}
+                        defaultFile={values.drivingLicenseCardFront}
                         description='Upload the front of your driving licence.'
                         fileFormats={['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf']}
                         icon={<DrivingLicenseCardFront />}
                         maxSize={8388608}
                         noClick
-                        onFileChange={(file?: File) => setFormValues('drivingLicenseCardFront', file)}
+                        onFileChange={(file?: File) => setFieldValue('drivingLicenseCardFront', file)}
                     />
                     <Dropzone
                         buttonText='Drop file or click here to upload'
-                        defaultFile={formValues.drivingLicenseCardBack}
+                        defaultFile={values.drivingLicenseCardBack}
                         description='Upload the back of your driving licence.'
                         fileFormats={['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf']}
                         icon={<DrivingLicenseCardBack />}
                         maxSize={8388608}
                         noClick
-                        onFileChange={(file?: File) => setFormValues('drivingLicenseCardBack', file)}
+                        onFileChange={(file?: File) => setFieldValue('drivingLicenseCardBack', file)}
                     />
                 </div>
                 <DocumentRuleHints docType='drivingLicense' />

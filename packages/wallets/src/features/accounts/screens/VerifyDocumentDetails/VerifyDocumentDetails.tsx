@@ -4,17 +4,16 @@ import { Field, useFormikContext } from 'formik';
 import moment from 'moment';
 import { useSettings } from '@deriv/api-v2';
 import { DerivLightNameDobPoiIcon } from '@deriv/quill-icons';
-import { DatePicker, FormField, InlineMessage, useFlow, WalletText } from '../../../../components';
+import { DatePicker, FormField, InlineMessage, WalletText } from '../../../../components';
 import unixToDateString from '../../../../utils/utils';
 import { dateOfBirthValidator, firstNameValidator, lastNameValidator } from '../../validations';
 import './VerifyDocumentDetails.scss';
 
 const VerifyDocumentDetails = () => {
     const { data: getSettings, update } = useSettings();
-    const { currentScreenId, formValues, setFormValues } = useFlow();
-    const { isValid, validateForm } = useFormikContext();
+    const { isValid, setFieldValue, validateForm, values } = useFormikContext();
 
-    const isOnfido = currentScreenId === 'onfidoScreen';
+    // const isOnfido = currentScreenId === 'onfidoScreen';
 
     const dateOfBirth = getSettings?.date_of_birth ?? 0;
     const formattedDateOfBirth = new Date(dateOfBirth * 1000);
@@ -22,31 +21,31 @@ const VerifyDocumentDetails = () => {
     const lastName = getSettings?.last_name;
 
     const isFormDirty =
-        formValues.firstName !== getSettings.first_name ||
-        formValues.lastName !== getSettings.last_name ||
-        formValues.dateOfBirth !== unixToDateString(new Date(dateOfBirth * 1000));
+        values.firstName !== getSettings.first_name ||
+        values.lastName !== getSettings.last_name ||
+        values.dateOfBirth !== unixToDateString(new Date(dateOfBirth * 1000));
 
     useEffect(() => {
-        setFormValues('firstName', getSettings?.first_name);
-        setFormValues('lastName', getSettings?.last_name);
+        setFieldValue('firstName', getSettings?.first_name);
+        setFieldValue('lastName', getSettings?.last_name);
         validateForm();
-    }, [getSettings?.first_name, getSettings?.last_name, setFormValues, validateForm]);
+    }, [getSettings?.first_name, getSettings?.last_name, setFieldValue, validateForm]);
 
     const handleDateChange = (formattedDate: string | null) => {
-        setFormValues('dateOfBirth', formattedDate);
+        setFieldValue('dateOfBirth', formattedDate);
     };
 
     const handleTNCChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.checked && isFormDirty && isOnfido && isValid) {
+        if (event.target.checked && isFormDirty /* && isOnfido */ && isValid) {
             update({
-                date_of_birth: formValues.dateOfBirth,
-                first_name: formValues.firstName,
-                last_name: formValues.lastName,
+                date_of_birth: values.dateOfBirth,
+                first_name: values.firstName,
+                last_name: values.lastName,
             });
         }
     };
 
-    if (formValues.verifiedDocumentDetails && isOnfido)
+    if (values.verifiedDocumentDetails /* && isOnfido */)
         return (
             <div
                 className='wallets-verify-document-details__placeholder'
@@ -65,9 +64,9 @@ const VerifyDocumentDetails = () => {
             <div className='wallets-verify-document-details__body'>
                 <div className='wallets-verify-document-details__content'>
                     <FormField
-                        autoFocus={isOnfido}
+                        // autoFocus={isOnfido}
                         defaultValue={firstName}
-                        disabled={formValues.verifiedDocumentDetails}
+                        disabled={values.verifiedDocumentDetails}
                         label='First name*'
                         message='Your first name as in your identity document'
                         name='firstName'
@@ -77,7 +76,7 @@ const VerifyDocumentDetails = () => {
                     />
                     <FormField
                         defaultValue={lastName}
-                        disabled={formValues.verifiedDocumentDetails}
+                        disabled={values.verifiedDocumentDetails}
                         label='Last name*'
                         message='Your last name as in your identity document'
                         name='lastName'
@@ -87,7 +86,7 @@ const VerifyDocumentDetails = () => {
                     />
                     <DatePicker
                         defaultValue={unixToDateString(formattedDateOfBirth)}
-                        disabled={formValues.verifiedDocumentDetails}
+                        disabled={values.verifiedDocumentDetails}
                         displayFormat='DD-MM-YYYY'
                         label='Date of birth*'
                         maxDate={moment().subtract(18, 'years').toDate()}

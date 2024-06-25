@@ -1,13 +1,14 @@
 import React, { ReactNode, useEffect, useMemo } from 'react';
+import { useFormikContext } from 'formik';
 import * as Yup from 'yup';
 import { useResidenceList, useSettings } from '@deriv/api-v2';
-import { FormField, InlineMessage, Loader, useFlow, WalletDropdown, WalletText } from '../../../../components';
+import { FormField, InlineMessage, Loader, WalletDropdown, WalletText } from '../../../../components';
 import { accountOpeningReasonList } from './constants';
 import './PersonalDetails.scss';
 
 const PersonalDetails = () => {
+    const { setFieldValue, values } = useFormikContext();
     const { data: residenceList, isLoading, isSuccess: isResidenceListSuccess } = useResidenceList();
-    const { formValues, setFormValues } = useFlow();
     const { data: getSettings } = useSettings();
 
     const countryCodeToPatternMapper = useMemo(() => {
@@ -24,31 +25,31 @@ const PersonalDetails = () => {
     }, [isResidenceListSuccess, residenceList]);
 
     const tinValidator = useMemo(() => {
-        const patternStr = countryCodeToPatternMapper[formValues?.taxResidence];
+        const patternStr = countryCodeToPatternMapper[values?.taxResidence];
         try {
             if (patternStr) {
                 Yup.string()
                     .required('Please fill in Tax identification number')
                     .matches(new RegExp(patternStr), 'The format is incorrect.')
-                    .validateSync(formValues?.taxIdentificationNumber);
+                    .validateSync(values?.taxIdentificationNumber);
             } else {
                 Yup.string()
                     .required('Please fill in Tax identification number')
-                    .validateSync(formValues?.taxIdentificationNumber);
+                    .validateSync(values?.taxIdentificationNumber);
             }
         } catch (err) {
             return (err as Yup.ValidationError).message;
         }
-    }, [countryCodeToPatternMapper, formValues?.taxIdentificationNumber, formValues?.taxResidence]);
+    }, [countryCodeToPatternMapper, values?.taxIdentificationNumber, values?.taxResidence]);
 
     useEffect(() => {
         if (getSettings && isResidenceListSuccess) {
-            setFormValues('citizenship', getSettings.citizen);
-            setFormValues('placeOfBirth', getSettings.place_of_birth);
-            setFormValues('taxResidence', getSettings.tax_residence);
-            setFormValues('accountOpeningReason', getSettings.account_opening_reason);
+            setFieldValue('citizenship', getSettings.citizen);
+            setFieldValue('placeOfBirth', getSettings.place_of_birth);
+            setFieldValue('taxResidence', getSettings.tax_residence);
+            setFieldValue('accountOpeningReason', getSettings.account_opening_reason);
         }
-    }, [getSettings, setFormValues, isResidenceListSuccess]);
+    }, [getSettings, setFieldValue, isResidenceListSuccess]);
 
     return (
         <div className='wallets-personal-details'>
@@ -86,8 +87,8 @@ const PersonalDetails = () => {
                             }))}
                             listHeight='sm'
                             name='wallets-personal-details__dropdown-citizenship'
-                            onSelect={selectedItem => setFormValues('citizenship', selectedItem)}
-                            value={getSettings?.citizen ?? formValues?.citizenship}
+                            onSelect={selectedItem => setFieldValue('citizenship', selectedItem)}
+                            value={getSettings?.citizen ?? values?.citizenship}
                             variant='comboBox'
                         />
                         <WalletDropdown
@@ -99,7 +100,7 @@ const PersonalDetails = () => {
                             }))}
                             listHeight='sm'
                             name='wallets-personal-details__dropdown-pob'
-                            onSelect={selectedItem => setFormValues('placeOfBirth', selectedItem)}
+                            onSelect={selectedItem => setFieldValue('placeOfBirth', selectedItem)}
                             value={getSettings?.place_of_birth ?? ''}
                             variant='comboBox'
                         />
@@ -116,22 +117,20 @@ const PersonalDetails = () => {
                             onChange={inputValue => {
                                 residenceList.forEach(residence => {
                                     if (residence.text?.toLowerCase() === inputValue.toLowerCase()) {
-                                        setFormValues('taxResidence', residence.value);
+                                        setFieldValue('taxResidence', residence.value);
                                     }
                                 });
                             }}
                             onSelect={selectedItem => {
-                                setFormValues('taxResidence', selectedItem);
+                                setFieldValue('taxResidence', selectedItem);
                             }}
-                            value={getSettings?.tax_residence ?? formValues?.taxResidence}
+                            value={getSettings?.tax_residence ?? values?.taxResidence}
                             variant='comboBox'
                         />
                         <FormField
-                            defaultValue={getSettings?.tax_identification_number ?? formValues?.taxIdentificationNumber}
-                            errorMessage={!formValues?.taxResidence ? 'Please fill in tax residence' : tinValidator}
-                            isInvalid={
-                                !formValues.taxResidence || !formValues.taxIdentificationNumber || Boolean(tinValidator)
-                            }
+                            defaultValue={getSettings?.tax_identification_number ?? values?.taxIdentificationNumber}
+                            errorMessage={!values?.taxResidence ? 'Please fill in tax residence' : tinValidator}
+                            isInvalid={!values.taxResidence || !values.taxIdentificationNumber || Boolean(tinValidator)}
                             label='Tax identification number*'
                             name='taxIdentificationNumber'
                         />
@@ -139,8 +138,8 @@ const PersonalDetails = () => {
                             label='Account opening reason*'
                             list={accountOpeningReasonList}
                             name='wallets-personal-details__dropdown-opening-reason'
-                            onSelect={selectedItem => setFormValues('accountOpeningReason', selectedItem)}
-                            value={getSettings?.account_opening_reason ?? formValues?.accountOpeningReason}
+                            onSelect={selectedItem => setFieldValue('accountOpeningReason', selectedItem)}
+                            value={getSettings?.account_opening_reason ?? values?.accountOpeningReason}
                             variant='comboBox'
                         />
                     </div>

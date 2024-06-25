@@ -1,5 +1,6 @@
 import React from 'react';
-import { Divider, Dropzone, FormField, useFlow, WalletText } from '../../../../../../components';
+import { useFormikContext } from 'formik';
+import { Divider, Dropzone, FormField, WalletText } from '../../../../../../components';
 import NIMCSlipFront from '../../../../../../public/images/accounts/nimc-slip-front.svg';
 import ProofOfAgeIcon from '../../../../../../public/images/accounts/proof-of-age.svg';
 import { documentRequiredValidator } from '../../../../validations';
@@ -7,13 +8,13 @@ import { DocumentRuleHints } from '../DocumentRuleHints';
 import './NIMCSlipDocumentUpload.scss';
 
 const NIMCSlipDocumentUpload = () => {
-    const { formValues, setFormValues } = useFlow();
+    const { setFieldValue, values } = useFormikContext();
 
     return (
         <div className='wallets-nimc-slip-document-upload' data-testid='dt_driving-license-document-upload'>
             <WalletText>First, enter your NIMC slip number.</WalletText>
             <FormField
-                defaultValue={formValues.nimcNumber ?? ''}
+                defaultValue={values.nimcNumber ?? ''}
                 label='NIMC slip number*'
                 name='nimcNumber'
                 validationSchema={documentRequiredValidator('NIMC slip number')}
@@ -25,24 +26,24 @@ const NIMCSlipDocumentUpload = () => {
                     <div className='wallets-nimc-slip-document-upload__dropzones--left'>
                         <Dropzone
                             buttonText='Drop file or click here to upload'
-                            defaultFile={formValues.nimcCardFront}
+                            defaultFile={values.nimcCardFront}
                             description='Upload your NIMC slip.'
                             fileFormats={['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf']}
                             icon={<NIMCSlipFront />}
                             maxSize={8388608}
-                            onFileChange={(file?: File) => setFormValues('nimcCardFront', file)}
+                            onFileChange={(file?: File) => setFieldValue('nimcCardFront', file)}
                         />
                     </div>
                     <div className='wallets-nimc-slip-document-upload__dropzones--right'>
                         <Dropzone
                             buttonText='Drop file or click here to upload'
-                            defaultFile={formValues.nimcCardBack}
+                            defaultFile={values.nimcCardBack}
                             description='Upload your proof of age: birth certificate or age declaration document.'
                             fileFormats={['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf']}
                             icon={<ProofOfAgeIcon />}
                             maxSize={8388608}
                             noClick
-                            onFileChange={(file?: File) => setFormValues('nimcCardBack', file)}
+                            onFileChange={(file?: File) => setFieldValue('nimcCardBack', file)}
                         />
                     </div>
                 </div>

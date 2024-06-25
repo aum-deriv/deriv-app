@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
+import { useFormikContext } from 'formik';
 import * as Yup from 'yup';
 import { usePOI, useResidenceList, useSettings } from '@deriv/api-v2';
-import { FormField, useFlow, WalletDropdown, WalletText } from '../../../../components';
+import { FormField, WalletDropdown, WalletText } from '../../../../components';
 import { InlineMessage } from '../../../../components/Base';
 import useDevice from '../../../../hooks/useDevice';
 import { THooks } from '../../../../types';
@@ -45,7 +46,7 @@ const ErrorMessage: React.FC<{ status: TErrorMessageProps }> = ({ status }) => {
 
 const IDVDocumentUpload = () => {
     const { data: poiStatus } = usePOI();
-    const { formValues, setFormValues } = useFlow();
+    const { setFieldValue, values } = useFormikContext();
     const { data: residenceList, isSuccess: isResidenceListSuccess } = useResidenceList();
     const { data: settings } = useSettings();
 
@@ -77,7 +78,7 @@ const IDVDocumentUpload = () => {
     }, [isResidenceListSuccess, residenceList, settings.citizen]);
 
     const validationSchema = useMemo(() => {
-        const documentTypeValue = formValues?.documentType;
+        const documentTypeValue = values?.documentType;
         const document = documentsMapper[documentTypeValue];
 
         if (document && document.pattern) {
@@ -108,7 +109,7 @@ const IDVDocumentUpload = () => {
         }
 
         return requiredValidator;
-    }, [documentsMapper, formValues?.documentType]);
+    }, [documentsMapper, values?.documentType]);
 
     const status = poiStatus?.current.status;
 
@@ -128,16 +129,16 @@ const IDVDocumentUpload = () => {
                     list={documentsDropdownList}
                     name='documentType'
                     onChange={inputValue => {
-                        setFormValues('documentType', textToValueMapper[inputValue]);
+                        setFieldValue('documentType', textToValueMapper[inputValue]);
                     }}
                     onSelect={selectedItem => {
-                        setFormValues('documentType', selectedItem);
+                        setFieldValue('documentType', selectedItem);
                     }}
-                    value={formValues?.documentType}
+                    value={values?.documentType}
                     variant='comboBox'
                 />
                 <FormField
-                    disabled={!formValues.documentType}
+                    disabled={!values.documentType}
                     label='Enter your document number'
                     name='documentNumber'
                     validationSchema={validationSchema}
