@@ -6,6 +6,7 @@ import { useModal } from '../../../../components/ModalProvider';
 import useDevice from '../../../../hooks/useDevice';
 import { DynamicLeverageContext } from '../../components/DynamicLeverageContext';
 import { PlatformDetails } from '../../constants';
+import { ClientVerification } from '../../flows';
 import { DynamicLeverageScreen, DynamicLeverageTitle } from '../../screens/DynamicLeverage';
 import { JurisdictionScreen } from '../../screens/Jurisdiction';
 import { MT5PasswordModal } from '..';
@@ -36,11 +37,13 @@ const JurisdictionModal = () => {
             return <MT5PasswordModal marketType={marketType} platform={platform} />;
         }
 
-        return (
-            <Suspense fallback={<Loader />}>
-                <LazyVerification selectedJurisdiction={selectedJurisdiction} />
-            </Suspense>
-        );
+        // return (
+        //     <Suspense fallback={<Loader />}>
+        //         <LazyVerification selectedJurisdiction={selectedJurisdiction} />
+        //     </Suspense>
+        // );
+
+        return <ClientVerification selectedJurisdiction={selectedJurisdiction} />;
     };
 
     const modalFooter = isDynamicLeverageVisible
