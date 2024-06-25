@@ -3,12 +3,13 @@ import Calendar, { CalendarProps } from 'react-calendar';
 import { useOnClickOutside } from 'usehooks-ts';
 import { LegacyCalendar1pxIcon } from '@deriv/quill-icons';
 import unixToDateString from '../../utils/utils';
-import FlowTextField, { TFlowFieldProps } from '../FlowField/FlowTextField';
+import type { TFormFieldProps } from '../FormField';
+import { FormField } from '../FormField';
 import customFormatShortWeekday from './utils';
 import 'react-calendar/dist/Calendar.css';
 import './DatePicker.scss';
 
-interface TDatePickerProps extends TFlowFieldProps {
+interface TDatePickerProps extends TFormFieldProps {
     displayFormat?: string;
     maxDate?: Date;
     minDate?: Date;
@@ -57,7 +58,7 @@ const DatePicker = ({
 
     return (
         <div className='wallets-datepicker' ref={datePickerRef}>
-            <FlowTextField
+            <FormField
                 disabled={disabled}
                 inputMode='none'
                 label={label}

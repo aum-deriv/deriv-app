@@ -4,7 +4,7 @@ import { Field, useFormikContext } from 'formik';
 import moment from 'moment';
 import { useSettings } from '@deriv/api-v2';
 import { DerivLightNameDobPoiIcon } from '@deriv/quill-icons';
-import { DatePicker, FlowTextField, InlineMessage, useFlow, WalletText } from '../../../../components';
+import { DatePicker, FormField, InlineMessage, useFlow, WalletText } from '../../../../components';
 import unixToDateString from '../../../../utils/utils';
 import { dateOfBirthValidator, firstNameValidator, lastNameValidator } from '../../validations';
 import './VerifyDocumentDetails.scss';
@@ -64,7 +64,7 @@ const VerifyDocumentDetails = () => {
             </InlineMessage>
             <div className='wallets-verify-document-details__body'>
                 <div className='wallets-verify-document-details__content'>
-                    <FlowTextField
+                    <FormField
                         autoFocus={isOnfido}
                         defaultValue={firstName}
                         disabled={formValues.verifiedDocumentDetails}
@@ -75,7 +75,7 @@ const VerifyDocumentDetails = () => {
                         validationSchema={firstNameValidator}
                         width='100%'
                     />
-                    <FlowTextField
+                    <FormField
                         defaultValue={lastName}
                         disabled={formValues.verifiedDocumentDetails}
                         label='Last name*'

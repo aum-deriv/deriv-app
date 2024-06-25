@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useMemo } from 'react';
 import * as Yup from 'yup';
 import { useResidenceList, useSettings } from '@deriv/api-v2';
-import { FlowTextField, InlineMessage, Loader, useFlow, WalletDropdown, WalletText } from '../../../../components';
+import { FormField, InlineMessage, Loader, useFlow, WalletDropdown, WalletText } from '../../../../components';
 import { accountOpeningReasonList } from './constants';
 import './PersonalDetails.scss';
 
@@ -126,7 +126,7 @@ const PersonalDetails = () => {
                             value={getSettings?.tax_residence ?? formValues?.taxResidence}
                             variant='comboBox'
                         />
-                        <FlowTextField
+                        <FormField
                             defaultValue={getSettings?.tax_identification_number ?? formValues?.taxIdentificationNumber}
                             errorMessage={!formValues?.taxResidence ? 'Please fill in tax residence' : tinValidator}
                             isInvalid={

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider, Dropzone, FlowTextField, useFlow, WalletText } from '../../../../../../components';
+import { Divider, Dropzone, FormField, useFlow, WalletText } from '../../../../../../components';
 import NIMCSlipFront from '../../../../../../public/images/accounts/nimc-slip-front.svg';
 import ProofOfAgeIcon from '../../../../../../public/images/accounts/proof-of-age.svg';
 import { documentRequiredValidator } from '../../../../validations';
@@ -12,7 +12,7 @@ const NIMCSlipDocumentUpload = () => {
     return (
         <div className='wallets-nimc-slip-document-upload' data-testid='dt_driving-license-document-upload'>
             <WalletText>First, enter your NIMC slip number.</WalletText>
-            <FlowTextField
+            <FormField
                 defaultValue={formValues.nimcNumber ?? ''}
                 label='NIMC slip number*'
                 name='nimcNumber'

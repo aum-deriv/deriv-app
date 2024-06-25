@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { DatePicker, Dropzone, FlowTextField, useFlow } from '../../../../../../components';
+import { DatePicker, Dropzone, FormField, useFlow } from '../../../../../../components';
 import { Divider, WalletText } from '../../../../../../components/Base';
 import PassportPlaceholder from '../../../../../../public/images/accounts/passport-placeholder.svg';
 import { documentRequiredValidator, expiryDateValidator } from '../../../../validations';
@@ -18,7 +18,7 @@ const PassportDocumentUpload = () => {
         <div className='wallets-passport-document-upload' data-testid='dt_passport-document-upload'>
             <WalletText>First, enter your Passport number and the expiry date.</WalletText>
             <div className='wallets-passport-document-upload__input-group'>
-                <FlowTextField
+                <FormField
                     defaultValue={formValues.passportNumber ?? ''}
                     label='Passport number*'
                     name='passportNumber'

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSettings, useStatesList } from '@deriv/api-v2';
-import { FlowTextField, useFlow } from '../../../../components';
+import { FormField, useFlow } from '../../../../components';
 import { InlineMessage, WalletDropdown, WalletText } from '../../../../components/Base';
 import {
     addressFirstLineValidator,
@@ -31,19 +31,19 @@ const AddressSection: React.FC = () => {
                 </InlineMessage>
             </div>
             <div className='wallets-address-section__input'>
-                <FlowTextField
+                <FormField
                     defaultValue={getSettings?.address_line_1 ?? ''}
                     label='First line of address*'
                     name='firstLine'
                     validationSchema={addressFirstLineValidator}
                 />
-                <FlowTextField
+                <FormField
                     defaultValue={getSettings?.address_line_2 ?? ''}
                     label='Second line of address (optional)'
                     name='secondLine'
                     validationSchema={addressSecondLineValidator}
                 />
-                <FlowTextField
+                <FormField
                     defaultValue={getSettings?.address_city ?? ''}
                     label='Town/City*'
                     name='townCityLine'
@@ -57,7 +57,7 @@ const AddressSection: React.FC = () => {
                     onSelect={selectedItem => setFormValues('stateProvinceDropdownLine', selectedItem)}
                     value={getSettings?.address_state ?? ''}
                 />
-                <FlowTextField
+                <FormField
                     defaultValue={getSettings?.address_postcode ?? ''}
                     label='Postal/ZIP code'
                     name='zipCodeLine'
