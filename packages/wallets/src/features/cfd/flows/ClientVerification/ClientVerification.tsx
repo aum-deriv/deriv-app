@@ -31,25 +31,28 @@ const ClientVerification: React.FC<TClientVerificationProps> = ({ selectedJurisd
     }
 
     const shouldSubmitPOI = ['none', 'rejected', 'expired'].includes(poi.status);
-
     // @ts-expect-error broken API types for get_account_status
     const shouldSubmitPOA = selectedJurisdiction ? !poa.verified_jurisdiction?.[selectedJurisdiction] : false;
 
     const shouldFillPersonalDetails = !settings?.has_submitted_personal_details;
 
     if (shouldSubmitPOI) {
-        <ModalStepWrapper>
-            <POIFlow />
-        </ModalStepWrapper>;
+        return (
+            <ModalStepWrapper>
+                <POIFlow />
+            </ModalStepWrapper>
+        );
     }
 
     if (shouldSubmitPOA) {
-        <ModalStepWrapper>
-            <PoaScreen />
-        </ModalStepWrapper>;
+        return (
+            <ModalStepWrapper>
+                <PoaScreen />
+            </ModalStepWrapper>
+        );
     }
 
-    if (shouldFillPersonalDetails) return <PersonalDetails />;
+    if (shouldFillPersonalDetails) return <PersonalDetails settings={settings} />;
 
     return null;
 };
