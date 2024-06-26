@@ -1,6 +1,6 @@
 import React from 'react';
 import { usePOA, usePOI, useSettings } from '@deriv/api-v2';
-import { Loader, ModalStepWrapper } from '../../../../components';
+import { Loader } from '../../../../components';
 import { THooks } from '../../../../types';
 import { POIFlow } from '../../../accounts/flows';
 import { PersonalDetails, PoaScreen } from '../../../accounts/screens';
@@ -22,34 +22,22 @@ const ClientVerification: React.FC<TClientVerificationProps> = ({ selectedJurisd
     const { data: poa, isLoading: isPoaLoading } = usePOA();
     const { data: settings, isLoading: isSettingsLoading } = useSettings();
 
-    if (isPoiLoading || isPoaLoading || isSettingsLoading || !settings || !poi || !poi.status || !poa) {
-        return (
-            <ModalStepWrapper>
-                <Loading />
-            </ModalStepWrapper>
-        );
+    if (isPoiLoading || isPoaLoading || isSettingsLoading || !settings || !poi || !poi.current.status || !poa) {
+        return <Loading />;
     }
 
-    const shouldSubmitPOI = ['none', 'rejected', 'expired'].includes(poi.status);
+    const shouldSubmitPOI = ['none', 'rejected', 'expired'].includes(poi.current.status);
     // @ts-expect-error broken API types for get_account_status
     const shouldSubmitPOA = selectedJurisdiction ? !poa.verified_jurisdiction?.[selectedJurisdiction] : false;
 
     const shouldFillPersonalDetails = !settings?.has_submitted_personal_details;
 
     if (shouldSubmitPOI) {
-        return (
-            <ModalStepWrapper>
-                <POIFlow />
-            </ModalStepWrapper>
-        );
+        return <POIFlow poi={poi} />;
     }
 
     if (shouldSubmitPOA) {
-        return (
-            <ModalStepWrapper>
-                <PoaScreen />
-            </ModalStepWrapper>
-        );
+        return <PoaScreen />;
     }
 
     if (shouldFillPersonalDetails) return <PersonalDetails settings={settings} />;
