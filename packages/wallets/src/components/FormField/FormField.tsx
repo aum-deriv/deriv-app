@@ -1,5 +1,5 @@
-import React, { forwardRef, Ref, useEffect, useState } from 'react';
-import { Field, FieldProps, useFormikContext } from 'formik';
+import React, { forwardRef, Ref, useState } from 'react';
+import { Field, FieldProps } from 'formik';
 import * as Yup from 'yup';
 import WalletTextField, { WalletTextFieldProps } from '../Base/WalletTextField/WalletTextField';
 
@@ -16,11 +16,10 @@ export interface TFormFieldProps extends WalletTextFieldProps {
  */
 const FormField = forwardRef(
     (
-        { defaultValue, disabled, errorMessage, isInvalid, name, validationSchema, ...rest }: TFormFieldProps,
+        { disabled, errorMessage, isInvalid, name, validationSchema, ...rest }: TFormFieldProps,
         ref: Ref<HTMLInputElement>
     ) => {
         const [hasTouched, setHasTouched] = useState(false);
-        const { setFieldTouched, setFieldValue: setFormValues } = useFormikContext();
 
         const validateField = (value: unknown) => {
             try {
@@ -32,25 +31,13 @@ const FormField = forwardRef(
             }
         };
 
-        useEffect(() => {
-            const setFormValuesAndTouch = async () => {
-                if (defaultValue) {
-                    await setFormValues(name, defaultValue, true);
-                    setFieldTouched(name, true, true);
-                }
-            };
-
-            setFormValuesAndTouch();
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, []);
-
         return (
             <Field name={name} validate={validateField}>
                 {({ field, form }: FieldProps) => {
                     return (
                         <WalletTextField
                             {...rest}
-                            defaultValue={defaultValue}
+                            defaultValue={field.value}
                             disabled={disabled}
                             errorMessage={hasTouched && (form.errors[name] || errorMessage)}
                             isInvalid={(hasTouched && isInvalid) || (hasTouched && Boolean(form.errors[name]))}
