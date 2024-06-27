@@ -6,6 +6,17 @@
     margin-bottom: 2.4rem;
     padding: 1.6rem;
 
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1.6rem 0;
+
+        &--reverse {
+            flex-direction: column-reverse;
+        }
+    }
+
     &__body {
         display: flex;
         flex-direction: row;
