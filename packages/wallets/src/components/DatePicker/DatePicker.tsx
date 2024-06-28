@@ -3,7 +3,7 @@ import { Field, FieldProps } from 'formik';
 import Calendar from 'react-calendar';
 import { useOnClickOutside } from 'usehooks-ts';
 import { LegacyCalendar1pxIcon } from '@deriv/quill-icons';
-import { unixToDateString } from '../../utils/utils';
+import { getFormattedDateString } from '../../utils/utils';
 import { WalletTextField } from '../Base';
 import type { TFormFieldProps } from '../FormField';
 import customFormatShortWeekday from './utils';
@@ -15,7 +15,7 @@ interface TDatePickerProps extends TFormFieldProps {
     maxDate?: Date;
     minDate?: Date;
     mobileAlignment?: 'above' | 'below';
-    onDateChange: (date: Date | null) => void;
+    onDateChange: (dateString: string | null) => void;
 }
 
 const DatePicker = ({
@@ -67,7 +67,7 @@ const DatePicker = ({
                             )}
                             showMessage
                             type='text'
-                            value={unixToDateString(field.value, displayFormat)}
+                            value={getFormattedDateString(field.value, displayFormat)}
                         />
                         {isCalendarOpen && (
                             <div
@@ -82,9 +82,11 @@ const DatePicker = ({
                                     onChange={value => {
                                         const calendarSelectedDate = Array.isArray(value) ? value[0] : value;
                                         setIsCalendarOpen(false);
-                                        onDateChange(calendarSelectedDate);
+                                        onDateChange(
+                                            getFormattedDateString(calendarSelectedDate as Date, 'YYYY-MM-DD')
+                                        );
                                     }}
-                                    value={unixToDateString(field.value)}
+                                    value={getFormattedDateString(field.value)}
                                 />
                             </div>
                         )}
