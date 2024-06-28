@@ -1,5 +1,6 @@
 export * from './AddressSection';
 export * from './CommonMistakesExamples';
+export * from './DocumentService';
 export * from './DocumentSubmission';
 export * from './IDVDocumentUpload';
 export * from './ManualDocumentUpload';
