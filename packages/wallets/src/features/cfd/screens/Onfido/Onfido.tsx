@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { useFormikContext } from 'formik';
-import { useOnfido, usePOA } from '@deriv/api-v2';
-import { InlineMessage } from '../../../../components';
+import { useInvalidateQuery, useOnfido } from '@deriv/api-v2';
+import { InlineMessage, Loader } from '../../../../components';
 import { VerifyDocumentDetails } from '../../../accounts';
 import './Onfido.scss';
 
@@ -11,52 +10,53 @@ const Onfido = () => {
         data: { hasSubmitted, onfidoContainerId, onfidoRef },
         isServiceTokenLoading,
     } = useOnfido();
-    // const { switchScreen } = useFlow;
-    const { data: poaStatus } = usePOA();
-    const { setFieldValue, values } = useFormikContext();
-    // if the user goes back and already submitted Onfido, check the form store first
+    const invalidate = useInvalidateQuery();
+    const [areDetailsVerified, setAreDetailsVerified] = useState<boolean>(false);
 
     useEffect(() => {
         if (hasSubmitted) {
-            setFieldValue('hasSubmittedOnfido', hasSubmitted);
             onfidoRef?.current?.safeTearDown();
-            // @ts-expect-error as the prop verified_jurisdiction is not yet present in GetAccountStatusResponse type
-            // if (!poaStatus?.is_pending && !poaStatus?.verified_jurisdiction?.[formValues.selectedJurisdiction]) {
-            //     switchScreen('poaScreen');
-            // } else {
-            //     switchScreen('poiPoaDocsSubmitted');
-            // }
+            invalidate('get_account_status');
         }
-    }, [hasSubmitted, poaStatus, values.selectedJurisdiction, setFieldValue, onfidoRef]);
+    }, [hasSubmitted, invalidate, onfidoRef]);
 
     return (
-        <div className='wallets-onfido'>
-            <VerifyDocumentDetails />
-            {!isServiceTokenLoading && (
-                <div
-                    className={classNames('wallets-onfido__wrapper', {
-                        'wallets-onfido__wrapper--animate': values.verifiedDocumentDetails,
-                    })}
-                >
-                    <div className='wallets-onfido__wrapper-onfido-container' id={onfidoContainerId} />
-                    {!values.verifiedDocumentDetails ? (
-                        <div className='wallets-onfido__wrapper-overlay'>
+        <VerifyDocumentDetails
+            onVerified={() => {
+                setAreDetailsVerified(true);
+            }}
+        >
+            <div className='wallets-onfido'>
+                {isServiceTokenLoading ? (
+                    <div className='wallets-onfido__loader'>
+                        <Loader />
+                    </div>
+                ) : (
+                    <div
+                        className={classNames('wallets-onfido__wrapper', {
+                            'wallets-onfido__wrapper--animate': areDetailsVerified,
+                        })}
+                    >
+                        <div className='wallets-onfido__wrapper-onfido-container' id={onfidoContainerId} />
+                        {!areDetailsVerified ? (
+                            <div className='wallets-onfido__wrapper-overlay'>
+                                <InlineMessage
+                                    message='Hit the checkbox above to choose your document.'
+                                    size='sm'
+                                    type='information'
+                                />
+                            </div>
+                        ) : (
                             <InlineMessage
-                                message='Hit the checkbox above to choose your document.'
+                                message='Your personal details have been saved successfully.'
                                 size='sm'
-                                type='information'
+                                type='announcement'
                             />
-                        </div>
-                    ) : (
-                        <InlineMessage
-                            message='Your personal details have been saved successfully.'
-                            size='sm'
-                            type='announcement'
-                        />
-                    )}
-                </div>
-            )}
-        </div>
+                        )}
+                    </div>
+                )}
+            </div>
+        </VerifyDocumentDetails>
     );
 };
 
