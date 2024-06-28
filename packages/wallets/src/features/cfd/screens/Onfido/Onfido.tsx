@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useInvalidateQuery, useOnfido } from '@deriv/api-v2';
-import { InlineMessage, Loader } from '../../../../components';
+import { InlineMessage, Loader, ModalStepWrapper } from '../../../../components';
 import { VerifyDocumentDetails } from '../../../accounts';
 import './Onfido.scss';
 
@@ -21,12 +21,13 @@ const Onfido = () => {
     }, [hasSubmitted, invalidate, onfidoRef]);
 
     return (
-        <VerifyDocumentDetails
-            onVerified={() => {
-                setAreDetailsVerified(true);
-            }}
-        >
+        <ModalStepWrapper title='Add a real MT5 account'>
             <div className='wallets-onfido'>
+                <VerifyDocumentDetails
+                    onVerified={() => {
+                        setAreDetailsVerified(true);
+                    }}
+                />
                 {isServiceTokenLoading ? (
                     <div className='wallets-onfido__loader'>
                         <Loader />
@@ -56,7 +57,7 @@ const Onfido = () => {
                     </div>
                 )}
             </div>
-        </VerifyDocumentDetails>
+        </ModalStepWrapper>
     );
 };
 
