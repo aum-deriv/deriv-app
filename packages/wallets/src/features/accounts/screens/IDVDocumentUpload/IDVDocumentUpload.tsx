@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useFormikContext } from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { usePOI, useResidenceList, useSettings } from '@deriv/api-v2';
 import { FormField, WalletDropdown, WalletText } from '../../../../components';
@@ -46,7 +46,6 @@ const ErrorMessage: React.FC<{ status: TErrorMessageProps }> = ({ status }) => {
 
 const IDVDocumentUpload = () => {
     const { data: poiStatus } = usePOI();
-    const { setFieldValue, values } = useFormikContext();
     const { data: residenceList, isSuccess: isResidenceListSuccess } = useResidenceList();
     const { data: settings } = useSettings();
 
@@ -77,78 +76,89 @@ const IDVDocumentUpload = () => {
         return [list, documents, textToValueMapping];
     }, [isResidenceListSuccess, residenceList, settings.citizen]);
 
-    const validationSchema = useMemo(() => {
-        const documentTypeValue = values?.documentType;
-        const document = documentsMapper[documentTypeValue];
-
-        if (document && document.pattern) {
-            let pattern;
-            try {
-                pattern = new RegExp(document.pattern);
-            } catch (err) {
-                const match = document.pattern.match(/(\(\?i\))/);
-                if (match) {
-                    // Passport pattern has (?i) which is not supported in RegExp
-                    // Replace the (?i) flag with the 'i' flag
-                    const patternWithoutFlag = document.pattern.replace(/(\(\?i\))/, '');
-                    pattern = new RegExp(patternWithoutFlag, 'i');
-                }
-            }
-
-            if (pattern)
-                return Yup.string()
-                    .matches(
-                        pattern,
-                        `Please enter the correct format. ${
-                            documentTypeValue in documentTypeToExampleMapper
-                                ? `Example: ${documentTypeToExampleMapper[documentTypeValue]}`
-                                : ''
-                        }`
-                    )
-                    .required(`Please enter your ${document.text} number.`);
-        }
-
-        return requiredValidator;
-    }, [documentsMapper, values?.documentType]);
-
     const status = poiStatus?.current.status;
 
     const negativeStatuses = status === statusCodes.expired || status === statusCodes.rejected;
 
     return (
-        <div className='wallets-idv-document-upload'>
-            <div className='wallets-idv-document-upload__body'>
-                {negativeStatuses && <ErrorMessage status={status} />}
-                <div className='wallets-idv-document-upload__title'>
-                    <WalletText weight='bold'>Identity verification</WalletText>
-                </div>
-                <WalletDropdown
-                    errorMessage={'Document type is required'}
-                    isRequired
-                    label='Choose the document type'
-                    list={documentsDropdownList}
-                    name='documentType'
-                    onChange={inputValue => {
-                        setFieldValue('documentType', textToValueMapper[inputValue]);
-                    }}
-                    onSelect={selectedItem => {
-                        setFieldValue('documentType', selectedItem);
-                    }}
-                    value={values?.documentType}
-                    variant='comboBox'
-                />
-                <FormField
-                    disabled={!values.documentType}
-                    label='Enter your document number'
-                    name='documentNumber'
-                    validationSchema={validationSchema}
-                />
-                <div className='wallets-idv-document-upload__title'>
-                    <WalletText weight='bold'>Details</WalletText>
-                </div>
-                <VerifyDocumentDetails />
-            </div>
-        </div>
+        <Formik
+            initialValues={{}}
+            onSubmit={() => {
+                null;
+            }}
+        >
+            {({ setFieldValue, values }) => {
+                const validationSchema = () => {
+                    const documentTypeValue = values?.documentType;
+                    const document = documentsMapper[documentTypeValue];
+
+                    if (document && document.pattern) {
+                        let pattern;
+                        try {
+                            pattern = new RegExp(document.pattern);
+                        } catch (err) {
+                            const match = document.pattern.match(/(\(\?i\))/);
+                            if (match) {
+                                // Passport pattern has (?i) which is not supported in RegExp
+                                // Replace the (?i) flag with the 'i' flag
+                                const patternWithoutFlag = document.pattern.replace(/(\(\?i\))/, '');
+                                pattern = new RegExp(patternWithoutFlag, 'i');
+                            }
+                        }
+
+                        if (pattern)
+                            return Yup.string()
+                                .matches(
+                                    pattern,
+                                    `Please enter the correct format. ${
+                                        documentTypeValue in documentTypeToExampleMapper
+                                            ? `Example: ${documentTypeToExampleMapper[documentTypeValue]}`
+                                            : ''
+                                    }`
+                                )
+                                .required(`Please enter your ${document.text} number.`);
+                    }
+
+                    return requiredValidator;
+                };
+
+                return (
+                    <div className='wallets-idv-document-upload'>
+                        <div className='wallets-idv-document-upload__body'>
+                            {negativeStatuses && <ErrorMessage status={status} />}
+                            <div className='wallets-idv-document-upload__title'>
+                                <WalletText weight='bold'>Identity verification</WalletText>
+                            </div>
+                            <WalletDropdown
+                                errorMessage={'Document type is required'}
+                                isRequired
+                                label='Choose the document type'
+                                list={documentsDropdownList}
+                                name='documentType'
+                                onChange={inputValue => {
+                                    setFieldValue('documentType', textToValueMapper[inputValue]);
+                                }}
+                                onSelect={selectedItem => {
+                                    setFieldValue('documentType', selectedItem);
+                                }}
+                                value={values?.documentType}
+                                variant='comboBox'
+                            />
+                            <FormField
+                                disabled={!values.documentType}
+                                label='Enter your document number'
+                                name='documentNumber'
+                                validationSchema={validationSchema}
+                            />
+                            <div className='wallets-idv-document-upload__title'>
+                                <WalletText weight='bold'>Details</WalletText>
+                            </div>
+                            <VerifyDocumentDetails />
+                        </div>
+                    </div>
+                );
+            }}
+        </Formik>
     );
 };
 
