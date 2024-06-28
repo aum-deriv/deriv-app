@@ -5,8 +5,8 @@ import moment from 'moment';
 import { useSettings } from '@deriv/api-v2';
 import { DerivLightNameDobPoiIcon } from '@deriv/quill-icons';
 import { DatePicker, FormField, InlineMessage, ModalStepWrapper, WalletText } from '../../../../components';
-import { unixToDateString } from '../../../../utils/utils';
-import { dateOfBirthValidator, firstNameValidator, lastNameValidator } from '../../validations';
+import { getFormattedDateString } from '../../../../utils/utils';
+import verifyPersonalDetailsValidationSchema from './verifyPersonalDetailsValidationSchema';
 import './VerifyDocumentDetails.scss';
 
 type TVerifyDocumentDetailsProps = {
@@ -21,7 +21,7 @@ const VerifyDocumentDetails: React.FC<React.PropsWithChildren<TVerifyDocumentDet
     const initialValues = useMemo(
         () => ({
             areDetailsVerified: false,
-            dateOfBirth: unixToDateString(new Date(settings.date_of_birth ?? 0 * 1000)),
+            dateOfBirth: getFormattedDateString(new Date(settings.date_of_birth ? settings.date_of_birth * 1000 : 0)),
             firstName: settings.first_name,
             lastName: settings.last_name,
         }),
@@ -36,12 +36,13 @@ const VerifyDocumentDetails: React.FC<React.PropsWithChildren<TVerifyDocumentDet
             onSubmit={() => {
                 null;
             }}
+            validationSchema={verifyPersonalDetailsValidationSchema}
         >
             {({ dirty, isValid, setFieldValue, values }) => {
                 const handleTNCChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
                     if (event.target.checked && dirty && isOnfido && isValid && values.dateOfBirth) {
                         update({
-                            date_of_birth: values.dateOfBirth,
+                            date_of_birth: getFormattedDateString(values.dateOfBirth),
                             first_name: values.firstName,
                             last_name: values.lastName,
                         });
@@ -50,8 +51,8 @@ const VerifyDocumentDetails: React.FC<React.PropsWithChildren<TVerifyDocumentDet
                     if (onVerified) onVerified();
                 };
 
-                const handleDateChange = (date: Date | null) => {
-                    setFieldValue('dateOfBirth', date);
+                const handleDateChange = (dateString: string | null) => {
+                    setFieldValue('dateOfBirth', dateString);
                 };
 
                 return (
@@ -84,7 +85,6 @@ const VerifyDocumentDetails: React.FC<React.PropsWithChildren<TVerifyDocumentDet
                                                 message='Your first name as in your identity document'
                                                 name='firstName'
                                                 showMessage
-                                                validationSchema={firstNameValidator}
                                                 width='100%'
                                             />
                                             <FormField
@@ -93,7 +93,6 @@ const VerifyDocumentDetails: React.FC<React.PropsWithChildren<TVerifyDocumentDet
                                                 message='Your last name as in your identity document'
                                                 name='lastName'
                                                 showMessage
-                                                validationSchema={lastNameValidator}
                                                 width='100%'
                                             />
                                             <DatePicker
@@ -107,7 +106,6 @@ const VerifyDocumentDetails: React.FC<React.PropsWithChildren<TVerifyDocumentDet
                                                 name='dateOfBirth'
                                                 onDateChange={handleDateChange}
                                                 showMessage
-                                                validationSchema={dateOfBirthValidator}
                                             />
                                         </div>
                                         <div className='wallets-verify-document-details__sidenote'>

@@ -24,23 +24,9 @@ export const nimcSlipValidator = Yup.string().matches(
 
 export const requiredValidator = Yup.string().required('This field is required');
 
-export const dateOfBirthValidator = Yup.date().required('Please enter your date of birth');
-
 export const expiryDateValidator = Yup.date()
     .min(new Date(), 'Expiry date cannot be today date or in the past')
     .required('Expiry date is required');
-
-export const firstNameValidator = Yup.string()
-    .required('This field is required')
-    .matches(/^[a-zA-Z\s\-.'']+$/, 'Letters, spaces, periods, hyphens, apostrophes only.')
-    .min(1, 'Enter no more than 50 characters.')
-    .max(50, 'Enter no more than 50 characters.');
-
-export const lastNameValidator = Yup.string()
-    .required('This field is required')
-    .matches(/^[a-zA-Z\s\-.'']+$/, 'Letters, spaces, periods, hyphens, apostrophes only.')
-    .min(1, 'Enter no more than 50 characters.')
-    .max(50, 'Enter no more than 50 characters.');
 
 export const addressFirstLineValidator = Yup.string()
     .trim()
