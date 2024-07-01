@@ -9,21 +9,13 @@ type TClientVerificationProps = {
     selectedJurisdiction: THooks.AvailableMT5Accounts['shortcode'];
 };
 
-const Loading = () => {
-    return (
-        <div style={{ height: 400, width: 600 }}>
-            <Loader />
-        </div>
-    );
-};
-
 const ClientVerification: React.FC<TClientVerificationProps> = ({ selectedJurisdiction }) => {
     const { data: poi, isLoading: isPoiLoading } = usePOI();
     const { data: poa, isLoading: isPoaLoading } = usePOA();
     const { data: settings, isLoading: isSettingsLoading } = useSettings();
 
     if (isPoiLoading || isPoaLoading || isSettingsLoading || !settings || !poi || !poi.current.status || !poa) {
-        return <Loading />;
+        return <Loader />;
     }
 
     const shouldSubmitPOI = ['none', 'rejected', 'expired'].includes(poi.current.status);
