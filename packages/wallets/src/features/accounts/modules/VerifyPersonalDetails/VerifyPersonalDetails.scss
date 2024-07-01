@@ -1,10 +1,10 @@
-.wallets-verify-document-details {
+.wallets-verify-personal-details {
     width: 100%;
     max-width: 64.2rem;
     border-radius: 0.8rem;
     border: 0.1rem solid var(--system-light-5-active-background, #d6dadb);
-    margin-bottom: 2.4rem;
     padding: 1.6rem;
+    transition: all 1s ease;
 
     &__body {
         display: flex;
@@ -102,5 +102,6 @@
 @keyframes animate-placeholder {
     to {
         min-height: 0;
+        display: none;
     }
 }

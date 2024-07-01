@@ -2,8 +2,8 @@ import React from 'react';
 import moment from 'moment';
 import { useSettings } from '@deriv/api-v2';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { FlowProvider, FlowTextField } from '../../../../../components';
-import VerifyDocumentDetails from '../VerifyDocumentDetails';
+import { FlowProvider, FormField } from '../../../../../components';
+import VerifyPersonalDetails from '../VerifyPersonalDetails';
 
 jest.mock('@deriv/api-v2', () => ({
     useSettings: jest.fn(),
@@ -29,11 +29,11 @@ describe('IDVDocumentUploadDetails', () => {
                         test: 'default',
                     }}
                     screens={{
-                        test: <FlowTextField name='test' />,
+                        test: <FormField name='test' />,
                     }}
                 >
                     {() => {
-                        return <VerifyDocumentDetails />;
+                        return <VerifyPersonalDetails />;
                     }}
                 </FlowProvider>
             );
@@ -63,11 +63,11 @@ describe('IDVDocumentUploadDetails', () => {
                         test: 'default',
                     }}
                     screens={{
-                        test: <FlowTextField name='test' />,
+                        test: <FormField name='test' />,
                     }}
                 >
                     {() => {
-                        return <VerifyDocumentDetails />;
+                        return <VerifyPersonalDetails />;
                     }}
                 </FlowProvider>
             );
@@ -102,11 +102,11 @@ describe('IDVDocumentUploadDetails', () => {
                         test: 'default',
                     }}
                     screens={{
-                        onfidoScreen: <FlowTextField name='onfido' />,
+                        onfidoScreen: <FormField name='onfido' />,
                     }}
                 >
                     {() => {
-                        return <VerifyDocumentDetails />;
+                        return <VerifyPersonalDetails />;
                     }}
                 </FlowProvider>
             );
@@ -149,11 +149,11 @@ describe('IDVDocumentUploadDetails', () => {
                         test: 'default',
                     }}
                     screens={{
-                        onfidoScreen: <FlowTextField name='onfido' />,
+                        onfidoScreen: <FormField name='onfido' />,
                     }}
                 >
                     {() => {
-                        return <VerifyDocumentDetails />;
+                        return <VerifyPersonalDetails />;
                     }}
                 </FlowProvider>
             );
