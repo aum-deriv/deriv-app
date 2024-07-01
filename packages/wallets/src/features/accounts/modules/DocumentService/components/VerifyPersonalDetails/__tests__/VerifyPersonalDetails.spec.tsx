@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { useSettings } from '@deriv/api-v2';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { FlowProvider, FormField } from '../../../../../components';
+import { FlowProvider, FormField } from '../../../../../../../components';
 import VerifyPersonalDetails from '../VerifyPersonalDetails';
 
 jest.mock('@deriv/api-v2', () => ({

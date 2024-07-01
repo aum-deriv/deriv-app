@@ -4,8 +4,8 @@ import { Field, Formik } from 'formik';
 import moment from 'moment';
 import { useSettings } from '@deriv/api-v2';
 import { DerivLightNameDobPoiIcon } from '@deriv/quill-icons';
-import { DatePicker, FormField, InlineMessage, WalletText } from '../../../../components';
-import { getFormattedDateString } from '../../../../utils/utils';
+import { DatePicker, FormField, InlineMessage, WalletText } from '../../../../../../components';
+import { getFormattedDateString } from '../../../../../../utils/utils';
 import verifyPersonalDetailsValidationSchema from './verifyPersonalDetailsValidationSchema';
 import './VerifyPersonalDetails.scss';
 
