@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormikContext } from 'formik';
-import { FormField, InlineMessage, WalletDropdown, WalletText } from '../../../../../../components';
+import { FormDropdown, FormField, InlineMessage, WalletText } from '../../../../../../components';
 import { TAddressDetails } from '../../types';
 import './AddressSection.scss';
 
@@ -22,23 +22,15 @@ const AddressSection: React.FC = () => {
                 </InlineMessage>
             </div>
             <div className='wallets-address-section__input'>
-                <FormField
-                    label='First line of address*'
-                    name='firstLine'
-                    // validationSchema={addressFirstLineValidator}
-                />
-                <FormField
-                    label='Second line of address (optional)'
-                    name='secondLine'
-                    // validationSchema={addressSecondLineValidator}
-                />
-                <FormField label='Town/City*' name='townCityLine' /* validationSchema={cityValidator} */ />
-                <WalletDropdown
+                <FormField label='First line of address*' name='firstLine' />
+                <FormField label='Second line of address (optional)' name='secondLine' />
+                <FormField label='Town/City*' name='townCityLine' />
+                <FormDropdown
                     label='State/Province'
                     list={status.statesList}
                     listHeight='sm'
                     name='stateProvinceLine'
-                    onSelect={selectedItem => setFieldValue('stateProvinceDropdownLine', selectedItem)}
+                    onSelect={selectedItem => setFieldValue('stateProvinceLine', selectedItem)}
                     value={values.stateProvinceLine ?? ''}
                 />
                 <FormField label='Postal/ZIP code' name='zipCodeLine' /* validationSchema={postcodeValidator} */ />
