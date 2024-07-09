@@ -23,6 +23,7 @@ const IDVService: React.FC<React.PropsWithChildren<TIDVServiceProps>> = ({ onCom
         availableDocumentOptions,
         displayedDocumentsList,
         documentExamples,
+        errorVerifyPersonalDetails,
         initialFormValues,
         isLoading,
         isSubmitted,
@@ -132,7 +133,7 @@ const IDVService: React.FC<React.PropsWithChildren<TIDVServiceProps>> = ({ onCom
                                     </>
                                 )}
                             </div>
-                            {clientHasDocuments && <VerifyPersonalDetails />}
+                            {clientHasDocuments && <VerifyPersonalDetails error={errorVerifyPersonalDetails} />}
                         </div>
                     </ModalStepWrapper>
                 );
