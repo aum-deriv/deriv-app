@@ -2,10 +2,10 @@ import React, { useMemo } from 'react';
 import classNames from 'classnames';
 import { useAuthorize, useJurisdictionStatus } from '@deriv/api-v2';
 import { LabelPairedChevronRightCaptionRegularIcon } from '@deriv/quill-icons';
+import { useDevice } from '@deriv-com/ui';
 import { InlineMessage, WalletText } from '../../../../../components/Base';
 import { useModal } from '../../../../../components/ModalProvider';
 import { TradingAccountCard } from '../../../../../components/TradingAccountCard';
-import useDevice from '../../../../../hooks/useDevice';
 import { THooks } from '../../../../../types';
 import { MarketTypeDetails, PlatformDetails } from '../../../constants';
 import { MT5TradeModal, VerificationFailedModal } from '../../../modals';
@@ -23,7 +23,7 @@ const AddedMT5AccountsList: React.FC<TProps> = ({ account }) => {
         [account.landing_company_short, account.status, getVerificationStatus]
     );
     const { title } = MarketTypeDetails[account.market_type ?? 'all'];
-    const { isMobile } = useDevice();
+    const { isDesktop } = useDevice();
     const { show } = useModal();
 
     return (
@@ -60,7 +60,7 @@ const AddedMT5AccountsList: React.FC<TProps> = ({ account }) => {
                     <WalletText size='sm'>{title}</WalletText>
                     {!activeWallet?.is_virtual && (
                         <div className='wallets-added-mt5__details-title-landing-company'>
-                            <WalletText color='black' size={isMobile ? 'sm' : 'xs'}>
+                            <WalletText color='black' size={isDesktop ? 'xs' : 'sm'}>
                                 {account.landing_company_short?.toUpperCase()}
                             </WalletText>
                         </div>

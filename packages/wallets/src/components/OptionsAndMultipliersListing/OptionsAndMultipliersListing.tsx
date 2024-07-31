@@ -2,8 +2,8 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useActiveLinkedToTradingAccount } from '@deriv/api-v2';
 import { LabelPairedChevronRightCaptionRegularIcon } from '@deriv/quill-icons';
+import { useDevice } from '@deriv-com/ui';
 import { optionsAndMultipliersContent } from '../../constants/constants';
-import useDevice from '../../hooks/useDevice';
 import { TRoute } from '../../routes/Router';
 import { WalletLink, WalletText } from '../Base';
 import { DerivAppsSection } from '../DerivAppsSection';
@@ -12,7 +12,7 @@ import LinkTitle from './LinkTitle';
 import './OptionsAndMultipliersListing.scss';
 
 const OptionsAndMultipliersListing = () => {
-    const { isMobile } = useDevice();
+    const { isDesktop } = useDevice();
     const history = useHistory();
     const { data: activeLinkedToTradingAccount } = useActiveLinkedToTradingAccount();
 
@@ -20,12 +20,12 @@ const OptionsAndMultipliersListing = () => {
         <div className='wallets-options-and-multipliers-listing'>
             <section className='wallets-options-and-multipliers-listing__header'>
                 <div className='wallets-options-and-multipliers-listing__header-title'>
-                    {!isMobile && (
+                    {isDesktop && (
                         <WalletText align='center' size='xl' weight='bold'>
                             Options
                         </WalletText>
                     )}
-                    <WalletText size={isMobile ? 'sm' : 'md'}>
+                    <WalletText size={isDesktop ? 'md' : 'sm'}>
                         Predict the market, profit if you’re right, risk only what you put in.{' '}
                         <WalletLink staticUrl='/trade-types/options/digital-options/up-and-down/'>
                             Learn more

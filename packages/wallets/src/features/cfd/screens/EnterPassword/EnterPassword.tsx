@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useActiveWalletAccount } from '@deriv/api-v2';
+import { useDevice } from '@deriv-com/ui';
 import { WalletButton, WalletPasswordFieldLazy, WalletText } from '../../../../components/Base';
-import useDevice from '../../../../hooks/useDevice';
 import { TMarketTypes, TPlatforms } from '../../../../types';
 import { validPassword } from '../../../../utils/password-validation';
 import { CFD_PLATFORMS, MarketTypeDetails, PlatformDetails } from '../../constants';
@@ -51,11 +51,9 @@ const EnterPassword: React.FC<TProps> = ({
     return (
         <div className='wallets-enter-password'>
             <div className='wallets-enter-password__container'>
-                {isDesktop && (
-                    <WalletText lineHeight='xl' weight='bold'>
-                        {modalTitle}
-                    </WalletText>
-                )}
+                <WalletText lineHeight='xl' weight='bold'>
+                    {modalTitle}
+                </WalletText>
                 <div className='wallets-enter-password__content'>
                     <WalletText size='sm'>
                         Enter your {title} password to add a{' '}

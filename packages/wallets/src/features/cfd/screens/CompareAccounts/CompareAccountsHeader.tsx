@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { LegacyClose2pxIcon } from '@deriv/quill-icons';
 import { WalletText } from '../../../../components';
-import CloseIcon from '../../../../public/images/ic-close-dark.svg';
 import './CompareAccountsHeader.scss';
 
 type TCompareAccountsHeader = {
@@ -23,8 +23,9 @@ const CompareAccountsHeader = ({ isDemo, isEuRegion }: TCompareAccountsHeader) =
                     {headerTitle}
                 </WalletText>
             </div>
-            <CloseIcon
+            <LegacyClose2pxIcon
                 className='wallets-compare-accounts-header__close-icon'
+                iconSize='xs'
                 onClick={() => {
                     history.push('/');
                 }}

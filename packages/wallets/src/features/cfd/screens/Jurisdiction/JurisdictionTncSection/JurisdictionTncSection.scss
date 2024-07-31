@@ -5,11 +5,11 @@
     justify-content: center;
     margin-top: 1.6rem;
 
-    @include desktop {
+    @include desktop-screen {
         height: 5rem;
     }
 
-    @include mobile {
+    @include mobile-or-tablet-screen {
         position: sticky;
         bottom: 0;
         background: var(--system-light-8-primary-background, #fff);
@@ -18,25 +18,42 @@
         width: 100vw;
     }
 
-    &-checkbox {
+    &__container {
+        width: 100%;
+        overflow-x: hidden;
+        text-align: center;
+
+        @include mobile-or-tablet-screen {
+            max-width: 60rem;
+            margin-inline: auto;
+        }
+    }
+
+    &__checkbox {
         align-items: center;
         display: flex;
         gap: 0.8rem;
         justify-content: center;
 
-        &-input {
+        &--input {
             all: revert;
             accent-color: #ff444f;
         }
 
-        &__link {
+        &--link {
             color: var(--brand-coral, #ff444f);
         }
 
-        &__link,
-        &-input,
-        &-label {
+        &--link,
+        &--input,
+        &--label {
             cursor: pointer;
         }
+    }
+}
+
+.wallets-modal-step-wrapper__body {
+    @include mobile-or-tablet-screen {
+        overflow-x: hidden;
     }
 }

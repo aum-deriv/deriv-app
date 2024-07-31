@@ -1,3 +1,4 @@
+import { useSettings } from '@deriv/api';
 import type {
     useAccountLimits,
     useActiveAccount,
@@ -23,13 +24,11 @@ import type {
     useMT5AccountsList,
     usePOA,
     usePOI,
-    useSettings,
     useSortedMT5Accounts,
     useTransactions,
     useTransferBetweenAccounts,
     useWalletAccountsList,
 } from '@deriv/api-v2';
-import { TSocketError, TSocketResponse } from '@deriv/api-v2/types';
 import { IconTypes } from '@deriv/quill-icons';
 
 // eslint-disable-next-line  @typescript-eslint/no-namespace
@@ -65,8 +64,7 @@ export namespace THooks {
     export type TransferAccount = NonNullable<
         NonNullable<ReturnType<typeof useTransferBetweenAccounts>['data']>['accounts']
     >[number];
-    export type AccountSettings = NonNullable<ReturnType<typeof useSettings>['data']>;
-    export type DocumentUpload = TSocketError<'document_upload'> & TSocketResponse<'document_upload'>;
+    export type AccountSettings = NonNullable<ReturnType<typeof useSettings>>['data'];
 }
 // eslint-disable-next-line  @typescript-eslint/no-namespace
 export namespace TPlatforms {
